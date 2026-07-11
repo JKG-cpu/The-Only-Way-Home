@@ -2,3 +2,4 @@ SCREEN_WIDTH: int = 1200
 SCREEN_HEIGHT: int = 750
 
 FPS: int = 60
+GRAVITY: float = 1200

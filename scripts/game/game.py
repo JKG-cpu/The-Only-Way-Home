@@ -1,6 +1,9 @@
 import pygame
+
 from ..utils.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 from ..utils import cc
+from ..entities import Player, Entity
+
 
 class Game:
     def __init__(self) -> None:
@@ -9,12 +12,22 @@ class Game:
 
         self.running: bool = True
         self.clock = pygame.time.Clock()
-    
+
+        self.all_sprites = pygame.sprite.Group()
+        self.collision_sprites = pygame.sprite.Group()
+
+        self.ground = Entity((0, SCREEN_HEIGHT - 100), (SCREEN_WIDTH, 100), (self.all_sprites, self.collision_sprites), self.collision_sprites)
+        self.ground.image.fill("blue")
+
+        self.player = Player((100, 100), (self.all_sprites), self.collision_sprites)
+
     # Handle pygame events
     def handle_events(self, events: list[pygame.Event]) -> None:
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
+            
+        self.player.handle_events(events)
 
     # Run Game Loop
     def run(self) -> None:
@@ -32,10 +45,13 @@ class Game:
 
     # Update objects
     def update(self, dt: float) -> None:
-        pass
+        self.player.update(dt)
 
     # Draw Objects
     def draw(self) -> None:
         self.screen.fill("black")
-        
+
+        self.player.draw()
+        self.ground.draw()
+
         pygame.display.update()
